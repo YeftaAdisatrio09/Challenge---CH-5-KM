@@ -1,51 +1,53 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import Accordion from 'react-bootstrap/Accordion'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './car.css'
-import PanelDisabled from '../../Components/PanelDisabled/PanelDisabled'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Accordion from "react-bootstrap/Accordion";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./car.css";
+import PanelDisabled from "../../Components/PanelDisabled/PanelDisabled";
+import { Link } from "react-router-dom";
 
-import IconPeople from "../../Assets/fi_users.svg"
-import IconGear from "../../Assets/fi_settings.svg"
-import IconCalendar from "../../Assets/fi_calendar.svg"
-import Arrow from "../../Assets/fi_arrow-left.svg"
-
+import IconPeople from "../../Assets/fi_users.svg";
+import IconGear from "../../Assets/fi_settings.svg";
+import IconCalendar from "../../Assets/fi_calendar.svg";
+import Arrow from "../../Assets/fi_arrow-left.svg";
+import { useDispatch, useSelector } from "react-redux";
+import carCartSlice from "../../Store/carCartSlice";
 const Car = (props) => {
+    const param = useParams();
+    const [car, setCar] = useState(null);
 
-    const param = useParams()
-    const [car, setCar] = useState(null)
+    const carCart = useSelector((store) => store.carCartSlice.carCart);
+    const dispatch = useDispatch();
+    console.log(carCart);
 
     useEffect(() => {
-        fetch(`https://rent-cars-api.herokuapp.com/customer/car/${param.id}`)
-        .then( response => {
-            return response.json()
-        })
-        .then( data => {
-            setCar({...data})
-        })
-    },[])
+        fetch(`https://625d73e74c36c753577540cb.mockapi.io/fejs2/api/c5-cars/${param.id}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                setCar({ ...data });
+            });
+    }, []);
 
     return (
         <div>
-            { car !== null &&
+            {car !== null && (
                 <>
-                <div className='upper-div-container'>
-                    <Link to="/" className='button-back'>
-                        <div className='arrow-image-container'>
-                            <img src={Arrow} className='arrow-image'/>
-                        </div>
-                        <div className='arrow-text'>
-                            Kembali
-                        </div>
-                    </Link>
-                </div>
-                <PanelDisabled/>
-                    <div className='details-container-main'>
-                        <div className='details-container'>
-                            <div className='details-container-left'>
-                                <div className='details-container-left-upper'>
-                                    <p style={{fontSize:"16px", fontWeight:"600"}}>Tentang Paket</p>
+                    <div className="upper-div-container">
+                        <Link to="/" className="button-back">
+                            <div className="arrow-image-container">
+                                <img src={Arrow} className="arrow-image" />
+                            </div>
+                            <div className="arrow-text">Kembali</div>
+                        </Link>
+                    </div>
+                    <PanelDisabled />
+                    <div className="details-container-main">
+                        <div className="details-container">
+                            <div className="details-container-left">
+                                <div className="details-container-left-upper">
+                                    <p style={{ fontSize: "16px", fontWeight: "600" }}>Tentang Paket</p>
                                     <p>Include</p>
 
                                     <ul className="text-muted">
@@ -83,68 +85,56 @@ const Car = (props) => {
                                     </Accordion>
                                 </div>
                             </div>
-                            <div className='details-container-right'>
-                                <div className='details-container-right-inner'>
-                                    <div className='car-image-container'>
-                                        <img src={car.image} className='car-image'/>
+                            <div className="details-container-right">
+                                <div className="details-container-right-inner">
+                                    <div className="car-image-container">
+                                        <img src={car.image} className="car-image" />
                                     </div>
-                                    <div className='car-name'>
-                                        {car.name}
-                                    </div>
-                                    <div className='car-details-container'>
-                                        <div className='car-detail-icons'>
-                                            <div className='car-detail-icon'>
-                                                <img src={IconPeople} className='car-icon'/>
+                                    <div className="car-name">{car.name}</div>
+                                    <div className="car-details-container">
+                                        <div className="car-detail-icons">
+                                            <div className="car-detail-icon">
+                                                <img src={IconPeople} className="car-icon" />
                                             </div>
-                                            <div className='car-book-text'>
-                                                4 orang (ambil dari API)
-                                            </div>
+                                            <div className="car-book-text">{car.passenger} Orang</div>
                                         </div>
-                                        <div className='car-detail-icons'>
-                                            <div className='car-detail-icon'>
-                                                <img src={IconGear} className='car-icon'/>
+                                        <div className="car-detail-icons">
+                                            <div className="car-detail-icon">
+                                                <img src={IconGear} className="car-icon" />
                                             </div>
-                                            <div className='car-book-text'>
-                                                Manual (ambil dari API)
-                                            </div>
+                                            <div className="car-book-text">{car.transmission}</div>
                                         </div>
-                                        <div className='car-detail-icons'>
-                                            <div className='car-detail-icon'>
-                                                <img src={IconCalendar} className='car-icon'/>
+                                        <div className="car-detail-icons">
+                                            <div className="car-detail-icon">
+                                                <img src={IconCalendar} className="car-icon" />
                                             </div>
-                                            <div className='car-book-text'>
-                                                Tahun 2020 (ambil dari API)
-                                            </div>
+                                            <div className="car-book-text">Tahun {car.year}</div>
                                         </div>
                                     </div>
-                                    <div className='car-book-price'>
-                                        <div className='car-total'>
-                                            Total
-                                        </div>
-                                        <div className='car-price-text'>
-                                            Rp. {car.price}
-                                        </div>
+                                    <div className="car-book-price">
+                                        <div className="car-total">Total</div>
+                                        <div className="car-price-text">Rp. {car.price}</div>
                                     </div>
-                                    <button className='btn button-right-details-container'>
-                                        <div type="submit" className='button-right-details'>
-                                            Pilih mobil
+                                    <button className="btn button-right-details-container" disabled={carCart === car.id} onClick={() => dispatch(carCartSlice.actions.addCarToCart({ id: car.id }))}>
+                                        <div type="submit" className="button-right-details">
+                                            {carCart === car.id ? "Lanjutkan Pembayaran" : "Pilih mobil"}
                                         </div>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className='button-center-container-outer'>
-                        <button className='btn button-center-container'>
-                            <div type="submit" className='button-center'>
-                                Pilih mobil
+                    <div className="button-center-container-outer">
+                        <button className="btn button-center-container" disabled={carCart === car.id} onClick={() => dispatch(carCartSlice.actions.addCarToCart({ id: car.id }))}>
+                            <div type="submit" className="button-center">
+                                {carCart === car.id ? "Lanjutkan Pembayaran" : "Pilih mobil"}
                             </div>
                         </button>
                     </div>
                 </>
-            }
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default Car
+export default Car;
